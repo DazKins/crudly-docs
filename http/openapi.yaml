@@ -1,0 +1,401 @@
+openapi: 3.0.0
+info:
+  title: Crudly API
+  description: API reference for Crudly
+  version: "0"
+
+servers:
+  - url: https://api.crudly.io/
+    description: Main Crudly API server
+
+paths:
+  /tables/{tableName}/entities:
+    post:
+      tags:
+        - Entity
+      summary: Create an entity
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+      requestBody:
+        description: The entity to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/entityWithoutId"
+      responses:
+        "201":
+          description: Entity created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/entityId"
+        "400":
+          description: Entity doesn't fit the table schema
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table not found
+        "429":
+          description: Rate limit exceeded
+    get:
+      tags:
+        - Entity
+      summary: Get entities
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+        - $ref: "#/components/parameters/filtersQueryParamOptional"
+        - $ref: "#/components/parameters/ordersQueryParamOptional"
+        - $ref: "#/components/parameters/limitQueryParamOptional"
+        - $ref: "#/components/parameters/offsetQueryParamOptional"
+      responses:
+        "200":
+          description: Entities fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/entities"
+        "400":
+          description: Invalid query parameters
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table not found
+        "429":
+          description: Rate limit exceeded
+
+  /tables/{tableName}/entities/{entityId}:
+    put:
+      tags:
+        - Entity
+      summary: Create an entity (with specified ID)
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+        - $ref: "#/components/parameters/entityIdPathParamRequired"
+      requestBody:
+        description: The entity to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/entityWithoutId"
+      responses:
+        "201":
+          description: Entity created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/entityId"
+        "400":
+          description: Entity doesn't fit the table schema/Invalid entity ID
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table not found
+        "409":
+          description: Entity with specified ID already exists
+        "429":
+          description: Rate limit exceeded
+    patch:
+      tags:
+        - Entity
+      summary: Update an entity
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+        - $ref: "#/components/parameters/entityIdPathParamRequired"
+      requestBody:
+        description: The entity to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/partialEntityWithoutId"
+      responses:
+        "200":
+          description: Entitiy updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/entity"
+        "400":
+          description: Partial entity doesn't fit the table schema/Invalid entity ID
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table/Entity not found
+        "429":
+          description: Rate limit exceeded
+    get:
+      tags:
+        - Entity
+      summary: Get an entity
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+        - $ref: "#/components/parameters/entityIdPathParamRequired"
+      responses:
+        "200":
+          description: Entity retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/entity"
+        "400":
+          description: Invalid entity ID
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table/Entity not found
+        "429":
+          description: Rate limit exceeded
+    delete:
+      tags:
+        - Entity
+      summary: Delete an entity
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+        - $ref: "#/components/parameters/entityIdPathParamRequired"
+      responses:
+        "200":
+          description: Entity deleted successfully
+        "400":
+          description: Invalid entity ID
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table/Entity not found
+        "429":
+          description: Rate limit exceeded
+
+  /tables/{tableName}/entities/batch:
+    post:
+      tags:
+        - Entity
+      summary: Create multiple entities
+      parameters:
+        - $ref: "#/components/parameters/projectIdHeader"
+        - $ref: "#/components/parameters/projectKeyHeader"
+        - $ref: "#/components/parameters/tableNamePathParamRequired"
+      requestBody:
+        description: The entities to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/entitiesWithoutIds"
+      responses:
+        "201":
+          description: Entities created successfully
+        "400":
+          description: One or more entities don't fit the table schema
+        "401":
+          description: Incorrect project key
+        "404":
+          description: Table not found
+        "429":
+          description: Rate limit exceeded
+
+components:
+  parameters:
+    projectIdHeader:
+      in: header
+      name: x-project-id
+      schema:
+        $ref: "#/components/schemas/projectId"
+      required: true
+
+    projectKeyHeader:
+      in: header
+      name: x-project-key
+      schema:
+        $ref: "#/components/schemas/projectKey"
+      required: true
+
+    tableNamePathParamRequired:
+      in: path
+      name: tableName
+      schema:
+        $ref: "#/components/schemas/tableName"
+      required: true
+
+    entityIdPathParamRequired:
+      in: path
+      name: entityId
+      schema:
+        $ref: "#/components/schemas/entityId"
+      required: true
+
+    filtersQueryParamOptional:
+      in: query
+      name: filter
+      schema:
+        $ref: "#/components/schemas/filters"
+      required: false
+
+    ordersQueryParamOptional:
+      in: query
+      name: order
+      schema:
+        $ref: "#/components/schemas/orders"
+      required: false
+
+    limitQueryParamOptional:
+      in: query
+      name: limit
+      schema:
+        $ref: "#/components/schemas/limit"
+      required: false
+      description: Defaults to 20
+
+    offsetQueryParamOptional:
+      in: query
+      name: offset
+      schema:
+        $ref: "#/components/schemas/offset"
+      required: false
+      description: Defaults to 0
+
+  schemas:
+    entities:
+      type: array
+      items:
+        $ref: "#/components/schemas/entity"
+
+    entitiesWithoutIds:
+      type: array
+      items:
+        $ref: "#/components/schemas/entityWithoutId"
+
+    partialEntityWithoutId:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/entityFieldValue"
+      example:
+        lastName: Jones
+        email: adam.jones@gmail.com
+
+    entityWithoutId:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/entityFieldValue"
+      example:
+        firstName: Adam
+        lastName: Smith
+        email: adam.smith@gmail.com
+
+    entityWithOptionalId:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f257ddfe-3b65-4bdb-9ac9-8867a1481193
+          description: The entity ID
+      additionalProperties:
+        $ref: "#/components/schemas/entityFieldValue"
+      example:
+        firstName: Adam
+        lastName: Smith
+        email: adam.smith@gmail.com
+
+    entity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f257ddfe-3b65-4bdb-9ac9-8867a1481193
+          description: The entity ID
+      additionalProperties:
+        $ref: "#/components/schemas/entityFieldValue"
+      required:
+        - id
+      example:
+        firstName: Adam
+        lastName: Smith
+        email: adam.smith@gmail.com
+        id: f86f6007-f4e4-49b0-9392-df6e8b359134
+
+    entityFieldValue:
+      example: adam.smith@gmail.com
+      oneOf:
+        - type: string
+        - type: boolean
+        - type: integer
+
+    tableName:
+      type: string
+      example: users
+      description: The name of the table
+
+    entityId:
+      type: string
+      format: uuid
+      example: f257ddfe-3b65-4bdb-9ac9-8867a1481193
+      description: The entity ID
+
+    projectId:
+      type: string
+      format: uuid
+      example: a826075f-1e57-46fa-99ab-a22e11756ce3
+      description: The project ID
+
+    projectKey:
+      type: string
+      example: m06yxqkNagXdd7ZZNAM2TvsDpp71YdqNLf7eGUWPdNotSXGtmIt1YtfgaSzAVcUVD8SUvpa6WpkvoZjk
+      description: The project key
+
+    filters:
+      type: array
+      items:
+        $ref: "#/components/schemas/filter"
+      example:
+        - "age>18"
+        - "name=adam"
+        - "height>=170"
+
+    filter:
+      type: string
+      format: "{field}{=|<|>|<=|>=}{value}"
+      example:
+        - "age>18"
+        - "name=adam"
+        - "height>=170"
+
+    orders:
+      type: array
+      items:
+        $ref: "#/components/schemas/order"
+      example:
+        - "age|desc"
+        - "name|asc"
+
+    order:
+      type: string
+      format: "{field}|{asc|desc}"
+      example:
+        - "age|desc"
+        - "name|asc"
+
+    limit:
+      type: integer
+      format: uint
+      description: The number of items to show in a page
+      example: 10
+
+    offset:
+      type: integer
+      format: uint
+      description: The number of items to skip in a page
+      example: 30

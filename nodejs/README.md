@@ -25,6 +25,10 @@ const crudly = createCrudly({
 
 ## Usage
 
+The Crudly object exposes a number of methods for interacting with your project's data. These methods are documented below.
+
+### Entity
+
 <details>
 <summary>createEntity(tableName, entity)</summary>
 
@@ -34,10 +38,10 @@ Create an entity
 
 ### Parameters
 
-| Name        | Type                 | Description           |
-| ----------- | -------------------- | --------------------- |
-| `tableName` | `TableName` (string) | The name of the table |
-| `entity`    | `Entity` (object)    | The entity to create  |
+| Name        | Type                 | Description           | Optional |
+| ----------- | -------------------- | --------------------- | -------- |
+| `tableName` | `TableName` (string) | The name of the table | ❌       |
+| `entity`    | `Entity` (object)    | The entity to create  | ❌       |
 
 ### Return Value
 
@@ -74,10 +78,10 @@ Create multiple entities
 
 ### Parameters
 
-| Name        | Type                  | Description            |
-| ----------- | --------------------- | ---------------------- |
-| `tableName` | `TableName` (string)  | The name of the table  |
-| `entities`  | `Entity[]` (object[]) | The entities to create |
+| Name        | Type                  | Description            | Optional |
+| ----------- | --------------------- | ---------------------- | -------- |
+| `tableName` | `TableName` (string)  | The name of the table  | ❌       |
+| `entities`  | `Entity[]` (object[]) | The entities to create | ❌       |
 
 ### Return Value
 
@@ -121,11 +125,11 @@ Create an entity with specified ID.
 
 ### Parameters
 
-| Name        | Type                 | Description                    |
-| ----------- | -------------------- | ------------------------------ |
-| `tableName` | `TableName` (string) | The name of the table          |
-| `id`        | `EntityId` (string)  | The ID of the entity to create |
-| `entity`    | `Entity` (object)    | The entity to create           |
+| Name        | Type                 | Description                    | Optional |
+| ----------- | -------------------- | ------------------------------ | -------- |
+| `tableName` | `TableName` (string) | The name of the table          | ❌       |
+| `id`        | `EntityId` (string)  | The ID of the entity to create | ❌       |
+| `entity`    | `Entity` (object)    | The entity to create           | ❌       |
 
 ### Return Value
 
@@ -166,10 +170,10 @@ Get an entity by ID.
 
 ### Parameters
 
-| Name        | Type                 | Description                 |
-| ----------- | -------------------- | --------------------------- |
-| `tableName` | `TableName` (string) | The name of the table       |
-| `id`        | `EntityId` (string)  | The ID of the entity to get |
+| Name        | Type                 | Description                 | Optional |
+| ----------- | -------------------- | --------------------------- | -------- |
+| `tableName` | `TableName` (string) | The name of the table       | ❌       |
+| `id`        | `EntityId` (string)  | The ID of the entity to get | ❌       |
 
 ### Return Value
 
@@ -189,7 +193,7 @@ const entity = await crudly.getEntityById(
 </details>
 
 <details>
-<summary>getEntities(tableName, filters)</summary>
+<summary>getEntities(tableName, filters?, orders?, limit?, offset?)</summary>
 
 ### Description
 
@@ -197,10 +201,19 @@ Get entities.
 
 ### Parameters
 
-| Name        | Type                  | Description           |
-| ----------- | --------------------- | --------------------- |
-| `tableName` | `TableName` (string)  | The name of the table |
-| `filters`   | `Filter[]` (string[]) | The filters to apply  |
+| Name        | Type                 | Description                                   | Optional |
+| ----------- | -------------------- | --------------------------------------------- | -------- |
+| `tableName` | `TableName` (string) | The name of the table                         | ❌       |
+| `options`   | `GetEntitiesOptions` | The options for fetching entities (see below) | ✅       |
+
+`GetEntitiesOptions` is an object with the following properties:
+
+| Name      | Type                  | Description                                                      | Optional | Default |
+| --------- | --------------------- | ---------------------------------------------------------------- | -------- | ------- |
+| `filters` | `Filter[]` (string[]) | The filters to apply (see [here](../Filter.md) for more details) | ✅       | []      |
+| `orders`  | `Order[]` (string[])  | The orders to apply (see [here](../Order.md) for more details)   | ✅       | []      |
+| `limit`   | `number`              | The page limit                                                   | ✅       | 20      |
+| `offset`  | `number`              | The page offset                                                  | ✅       | 0       |
 
 ### Return Value
 
@@ -208,13 +221,19 @@ Get entities.
 | --------------------- | ------------ |
 | `Entity[]` (object[]) | The entities |
 
-### Example
+### Examples
 
 ```javascript
-const entities = await crudly.getEntities("users", [
-  'firstName="alex"',
-  'lastName="smith"',
-]);
+const entities = await crudly.getEntities("users", {
+  filters: ['firstName="alex"', 'lastName="smith"'],
+});
+```
+
+```javascript
+const entities = await crudly.getEntities("users", {
+  orders: ["firstName|asc", "lastName|desc"],
+  limit: 1,
+});
 ```
 
 </details>
@@ -228,11 +247,11 @@ Get entities.
 
 ### Parameters
 
-| Name        | Type                 | Description                    |
-| ----------- | -------------------- | ------------------------------ |
-| `tableName` | `TableName` (string) | The name of the table          |
-| `id`        | `EntityId` (string)  | The ID of the entity to update |
-| `entity`    | `Entity` (object)    | The update to apply            |
+| Name        | Type                 | Description                    | Optional |
+| ----------- | -------------------- | ------------------------------ | -------- |
+| `tableName` | `TableName` (string) | The name of the table          | ❌       |
+| `id`        | `EntityId` (string)  | The ID of the entity to update | ❌       |
+| `entity`    | `Entity` (object)    | The update to apply            | ❌       |
 
 ### Return Value
 
@@ -263,10 +282,10 @@ Delete an entity.
 
 ### Parameters
 
-| Name        | Type                 | Description                    |
-| ----------- | -------------------- | ------------------------------ |
-| `tableName` | `TableName` (string) | The name of the table          |
-| `id`        | `EntityId` (string)  | The ID of the entity to delete |
+| Name        | Type                 | Description                    | Optional |
+| ----------- | -------------------- | ------------------------------ | -------- |
+| `tableName` | `TableName` (string) | The name of the table          | ❌       |
+| `id`        | `EntityId` (string)  | The ID of the entity to delete | ❌       |
 
 ### Return Value
 
@@ -281,3 +300,7 @@ await crudly.deleteEntity("users", "0ede4735-3e24-4704-920b-bb50dfa70b9b");
 ```
 
 </details>
+
+### Table
+
+TBD

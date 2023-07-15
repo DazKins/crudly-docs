@@ -242,6 +242,7 @@ components:
       schema:
         $ref: "#/components/schemas/filters"
       required: false
+      description: Filters to apply. See [here](../Filter.md) for more information
 
     ordersQueryParamOptional:
       in: query
@@ -249,6 +250,7 @@ components:
       schema:
         $ref: "#/components/schemas/orders"
       required: false
+      description: Orders to apply. See [here](../Order.md) for more information
 
     limitQueryParamOptional:
       in: query

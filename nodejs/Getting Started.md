@@ -10,7 +10,7 @@ We'll be building off of the tables created in this guide.
 
 In this guide, we'll use the tables created for our Pet Grooming shop to host a simple API for a web application.
 
-Note that you will find the full code of this guide in the [examples](./examples) folder.
+Note that you will find the full code of this guide in the [example](./example) folder.
 
 ## Setup
 
@@ -34,7 +34,7 @@ We'll install express to host the HTTP web server:
 npm install express
 ```
 
-And let's populate `main.js` a basic express server. We'll add routes for getting customer, pet and a pet's owner alongside some routes for creating them:
+And let's populate `main.js` with a basic express server. We'll add routes for getting customer, pet and a pet's owner alongside some routes for creating them:
 
 ```js
 import express from "express";
@@ -146,7 +146,7 @@ app.get("/pet/:id", async (req, res) => {
 });
 ```
 
-It's as simple as that! We simplify specify which table we want to fetch from (the `pet` table) and the ID of the entity we want to fetch. Let's do the same for the customer endpoint:
+It's as simple as that! We simplify specify which table we want to fetch from (the `pet` table) and the ID of the entity we want to fetch. Note that a `null` from this function implies no entity was found with that ID. Let's do the same for the customer endpoint:
 
 ```js
 app.get("/customer/:id", async (req, res) => {
@@ -180,13 +180,15 @@ app.get("/pet/:id/owner", async (req, res) => {
 });
 ```
 
-And that's all the endpoint implemented!
+We'll return a 404 if we can't find the pet, since the pet ID is a path parameter. We'll return a 500 if the pet's owner can't be found. And that's all the endpoints implemented!
 
 Let's give it a quick try with:
 
 ```bash
-curl localhost:3000/pet/bde57a45-23ca-47bf-a3c8-d488412d3c9f/owner
+curl localhost:3000/pet/<PET ID>/owner
 ```
+
+Replace `<PET ID>` with the ID of your pet and you should see the pet's owner returned in the response.
 
 ## Further Reading
 

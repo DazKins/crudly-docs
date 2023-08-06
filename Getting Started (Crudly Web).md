@@ -44,4 +44,4 @@ And navigating back to the project screen we should now see both tables present:
 
 <img src="./.media/perfect-pets-tables-created.png" width="800">
 
-Now we've finished creating our tables we are ready to start using them in our applications!
+Now we've finished creating our tables we are ready to start using them in our applications! Head back to the [root "Getting Started"](./Getting%20Started.md) page for the next steps

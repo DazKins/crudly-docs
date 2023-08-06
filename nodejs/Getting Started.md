@@ -10,6 +10,8 @@ We'll be building off of the tables created in this guide.
 
 In this guide, we'll use the tables created for our Pet Grooming shop to host a simple API for a web application.
 
+Note that you will find the full code of this guide in the [examples](./examples) folder.
+
 ## Setup
 
 Let's start by creating a new NodeJS project with a basic `package.json`:

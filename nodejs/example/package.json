@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@crudly/crudly": "0.9.7",
+    "express": "4.18.2"
+  }
+}

@@ -17,6 +17,7 @@ Feel free to browse around the repo or follow the contents below:
 - [Entity](./entity.md)
 - [Filter](./filter.md)
 - [Order](./order.md)
+- [Time](./time.md)
 
 ### Client Library Documentation
 

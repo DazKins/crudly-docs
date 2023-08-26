@@ -5,7 +5,7 @@ info:
   version: "0"
 
 servers:
-  - url: https://api.crudly.io/
+  - url: https://api.crudly.co/
     description: Main Crudly API server
 
 paths:

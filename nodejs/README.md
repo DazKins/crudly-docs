@@ -193,7 +193,7 @@ const entity = await crudly.getEntityById(
 </details>
 
 <details>
-<summary>getEntities(tableName, filters?, orders?, limit?, offset?)</summary>
+<summary>getEntities(tableName, options?)</summary>
 
 ### Description
 
@@ -304,3 +304,33 @@ await crudly.deleteEntity("users", "0ede4735-3e24-4704-920b-bb50dfa70b9b");
 ### Table
 
 TBD
+
+### Rate limit
+
+<details>
+<summary>getRateLimit()</summary>
+
+### Description
+
+Get rate limit information for a project.
+
+### Return Value
+
+| Type        | Description                        |
+| ----------- | ---------------------------------- |
+| `RateLimit` | A project's rate limit information |
+
+`RateLimit` is an object with the following properties:
+
+| Name               | Type     | Description                                              |
+| ------------------ | -------- | -------------------------------------------------------- |
+| `dailyRateLimit`   | `number` | The number of daily API requests allowed for the project |
+| `currentRateUsage` | `number` | The current rate usage for the project                   |
+
+### Example
+
+```javascript
+const { dailyRateLimit, currentRateUsage } = await crudly.getRateLimit();
+```
+
+</details>

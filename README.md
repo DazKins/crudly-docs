@@ -12,12 +12,12 @@ Feel free to browse around the repo or follow the contents below:
 
 ### Crudly Documentation
 
-- [Project](./project.md)
-- [Table](./table.md)
-- [Entity](./entity.md)
-- [Filter](./filter.md)
-- [Order](./order.md)
-- [Time](./time.md)
+- [Project](./Project.md)
+- [Table](./Table.md)
+- [Entity](./Entity.md)
+- [Filter](./Filter.md)
+- [Order](./Order.md)
+- [Time](./Time.md)
 
 ### Client Library Documentation
 
